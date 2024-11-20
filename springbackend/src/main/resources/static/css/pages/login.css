@@ -1,0 +1,162 @@
+/* 通用樣式與全域設置 */
+.separator-or {
+  font-size: 16px;
+  padding: 8px 20px;
+  border-radius: 30px;
+  background-color: #f3f6f9;
+  color: #7E8299;
+  font-weight: bold;
+  margin: 2em 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5eaee;
+}
+
+.separator-or {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  color: #bbb;
+}
+
+/* 登錄頁樣式 */
+.login.login-2 .content {
+  background-color: #d1ebeb;
+}
+
+.login.login-2 .content .content-img {
+  min-height: 450px;
+}
+
+/* 動態切換樣式 */
+.login.login-2 .login-signin,
+.login.login-2 .login-signup,
+.login.login-2 .login-forgot {
+  display: none;
+}
+
+.login.login-2.login-signin-on .login-signin,
+.login.login-2.login-signup-on .login-signup,
+.login.login-2.login-forgot-on .login-forgot {
+  display: block;
+}
+
+.login.login-2.login-signin-on .login-signup,
+.login.login-2.login-signin-on .login-forgot,
+.login.login-2.login-signup-on .login-signin,
+.login.login-2.login-signup-on .login-forgot,
+.login.login-2.login-forgot-on .login-signin,
+.login.login-2.login-forgot-on .login-signup {
+  display: none;
+}
+
+/* 表單樣式 */
+.login-form {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.login-form:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 輸入框樣式 */
+.form-control {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.75em 1em;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #80cbc4;
+  box-shadow: 0 0 0 3px rgba(128, 203, 196, 0.3);
+}
+
+/* 按鈕樣式 */
+.btn {
+  padding: 0.5em 1.5em;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* 主操作按鈕 */
+#kt_login_signin_submit,
+#kt_login_signup_submit {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+#kt_login_signin_submit:hover,
+#kt_login_signup_submit:hover {
+  background-color: #66bb6a;
+}
+
+/* 次要操作按鈕 */
+#kt_login_signup,
+#kt_login_signup_cancel,
+#kt_login_forgot_submit,
+#kt_login_forgot_cancel {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#kt_login_signup:hover,
+#kt_login_signup_cancel:hover,
+#kt_login_forgot_submit:hover,
+#kt_login_forgot_cancel:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 響應式佈局 */
+@media (min-width: 992px) {
+  .login.login-2 .login-aside {
+    flex: 0 0 60%;
+    max-width: 60%;
+    background-size: cover;
+  }
+  .login.login-2 .content {
+    flex: 0 0 40%;
+  }
+  .login.login-2 .login-form {
+    width: 100%;
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .login.login-2 .login-aside,
+  .login.login-2 .content {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .login.login-2 .login-form {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+/* 漸變效果 */
+.login-aside {
+  position: relative;
+}
+
+.login-aside::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
