@@ -1,276 +1,74 @@
-"use strict";
-
-// Class Definition
-var KTLogin = function () {
-    var _login;
-
-    var _showForm = function (form) {
-        var cls = 'login-' + form + '-on';
-        var form = 'kt_login_' + form + '_form';
-
-        _login.removeClass('login-forgot-on');
-        _login.removeClass('login-signin-on');
-        _login.removeClass('login-signup-on');
-
-        _login.addClass(cls);
-
-        KTUtil.animateClass(KTUtil.getById(form), 'animate__animated animate__backInUp');
+document.addEventListener('DOMContentLoaded', function() {
+    // 切換到註冊表單的按鈕
+    const signUpButton = document.getElementById('kt_login_signup');
+    if (signUpButton) {
+        signUpButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/login?showSignupForm=true';
+        });
     }
 
-    var _handleSignInForm = function () {
-        var validation;
+    // 取消按鈕（返回登錄表單）
+    const cancelButton = document.getElementById('kt_login_signup_cancel');
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/login';
+        });
+    }
 
-        validation = FormValidation.formValidation(
-            KTUtil.getById('kt_login_signin_form'),
-            {
-                fields: {
-                    username: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Username is required'
-                            }
-                        }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Password is required'
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    submitButton: new FormValidation.plugins.SubmitButton(),
-                    //defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-                    // Uncomment this line to enable normal button submit after form validation
-                    bootstrap: new FormValidation.plugins.Bootstrap()
-                }
+    // 登錄表單驗證
+    const loginForm = document.getElementById('kt_login_signin_form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            const username = this.querySelector('input[name="username"]').value.trim();
+            const password = this.querySelector('input[name="password"]').value.trim();
+
+            if (!username || !password) {
+                e.preventDefault();
+                alert('Username and password are required!');
+                return false;
             }
-        );
-
-        $('#kt_login_signin_submit').on('click', function (e) {
-            e.preventDefault();
-
-            validation.validate().then(function (status) {
-                if (status == 'Valid') {
-                    swal.fire({
-                        text: "Thank you for submitting the form.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Okay",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function () {
-                        jQuery.ajax('/signIn', {
-                            type: "POST",
-                            data: $("#kt_login_signin_form").serialize(),
-                            success: (data) => {
-                                window.location.replace('/')
-                            },
-                            error: function (data) {
-                                $('[data-switch=true]').bootstrapSwitch();
-                                let content = {};
-                                content.message = data.responseJSON.error;
-                                $.notify(content, {
-                                    type: 'danger',
-                                    placement: {
-                                        from: 'top',
-                                        align: 'left'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                });
-                            }
-                        });
-                    });
-                } else {
-                    swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function () {
-                        KTUtil.scrollTop();
-                    });
-                }
-            });
-        });
-
-        // Handle forgot button
-        // $('#kt_login_forgot').on('click', function (e) {
-        //     e.preventDefault();
-        //     _showForm('forgot');
-        // });
-
-        // Handle signup
-        $('#kt_login_signup').on('click', function (e) {
-            e.preventDefault();
-            _showForm('signup');
         });
     }
 
-    var _handleSignUpForm = function (e) {
-        var validation;
-        var form = KTUtil.getById('kt_login_signup_form');
+    // 註冊表單驗證
+    const signupForm = document.getElementById('kt_login_signup_form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            const username = this.querySelector('input[name="username"]').value.trim();
+            const email = this.querySelector('input[name="email"]').value.trim();
+            const password = this.querySelector('input[name="password"]').value.trim();
+            const confirmPassword = this.querySelector('input[name="cpassword"]').value.trim();
 
-        // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-        validation = FormValidation.formValidation(
-            form,
-            {
-                fields: {
-                    username: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Username is required'
-                            }
-                        }
-                    },
-                    email: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Email address is required'
-                            },
-                            emailAddress: {
-                                message: 'This is not a valid email address'
-                            }
-                        }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The password is required'
-                            },
-                            regexp: {
-                                regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                                message: 'Password must be at least 8 characters long and include at least one number, one upper-case letter and one special character'
-                            }
-                        }
-                    },
-                    cpassword: {
-                        validators: {
-                            notEmpty: {
-                                message: 'The confirmed password is required'
-                            },
-                            identical: {
-                                compare: function () {
-                                    return form.querySelector('[name="password"]').value;
-                                },
-                                message: 'Passwords do not match. Please re-enter and ensure they match.'
-                            }
-                        }
-                    },
-                    agree: {
-                        validators: {
-                            notEmpty: {
-                                message: 'You must accept the terms and conditions'
-                            }
-                        }
-                    },
-                },
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    bootstrap: new FormValidation.plugins.Bootstrap()
-                }
+            // 驗證所有欄位是否為空
+            if (!username || !email || !password || !confirmPassword) {
+                e.preventDefault();
+                alert('All fields are required!');
+                return false;
             }
-        );
 
-        $('#kt_login_signup_submit').on('click', function (e) {
-            e.preventDefault();
-
-            validation.validate().then(function (status) {
-                if (status == 'Valid') {
-                    swal.fire({
-                        text: "Thank you for submitting the form.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Okay",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function () {
-                        jQuery.ajax('/signUp', {
-                            type: "POST",
-                            data: $("#kt_login_signup_form").serialize(),
-                            success: (data) => {
-                                window.location.replace('/')
-                            },
-                            error: function (data) {
-                                $('[data-switch=true]').bootstrapSwitch();
-                                let content = {};
-                                content.message = data.responseJSON.error;
-                                $.notify(content, {
-                                    type: 'danger',
-                                    placement: {
-                                        from: 'top',
-                                        align: 'left'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                });
-                            }
-                        });
-                    });
-                } else {
-                    swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function () {
-                        KTUtil.scrollTop();
-                    });
-                }
-            });
-        });
-
-        // Handle cancel button
-        $('#kt_login_signup_cancel').on('click', function (e) {
-            e.preventDefault();
-            
-            _showForm('signin');
+            // 驗證密碼是否一致
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
         });
     }
 
-    // Public Functions
-    return {
-        // public functions
-        init: function () {
-            _login = $('#kt_login');
+    // 密碼可見性切換
+    const passwordToggle = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('in-password');
 
-            _handleSignInForm();
-            _handleSignUpForm();
-        }
-    };
-}();
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
 
-// Class Initialization
-jQuery(document).ready(function () {
-    KTLogin.init();
+            // 切換眼睛圖標
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
 });
-
-
-function togglePasswordVisibility() {
-    var passwordInput = document.getElementById('in-password');
-    var togglePasswordIcon = document.getElementById('toggle-password');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        togglePasswordIcon.classList.remove('fa-eye');
-        togglePasswordIcon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        togglePasswordIcon.classList.remove('fa-eye-slash');
-        togglePasswordIcon.classList.add('fa-eye');
-    }
-}

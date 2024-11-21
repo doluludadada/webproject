@@ -1,33 +1,33 @@
-{% extends 'base-task.html' %}
-{% load static %}
-
+<!-- 使用 Thymeleaf 的模板繼承語法 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}TaskIT Homepage{% endblock %}</title>
-    {% block css %}
-    <link href="{% static 'css/pages/homepage.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/pages/base-task.css' %}" rel="stylesheet" type="text/css"/>
-    {% endblock %}
-    {% block js %}
-    <script src="{% static 'js/pages/homepage.js' %}"></script>
-    {% endblock %}
-</head>
+    <title th:text="'TaskIT Homepage'">TaskIT Homepage</title>
 
-{% block content-task %}
-<!--begin::Content-->
+    <!-- 引入 CSS -->
+    <link th:href="@{/css/pages/homepage.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/pages/base-task.css}" rel="stylesheet" type="text/css"/>
+
+    <!-- 引入 JS -->
+    <script th:src="@{/js/pages/homepage.js}"></script>
+</head>
+<body>
+
+<!-- 引入導航欄或其他公共部分 -->
+<!-- 可以使用 Thymeleaf 的片段（fragments）進行模板繼承 -->
+
+<!-- 主內容 -->
 <div class="centered-container">
     <div class="greeting-container">
         <h1 class="hello-animation">Hello</h1>
-        <h1 class="username-animation">{{ username }}</h1>
+        <h1 class="username-animation" th:text="${username}"></h1>
     </div>
     <div class="button-container">
-        <a class="btn btn-primary btn-large" href="{% url 'task:task-list' %}" role="button">Personal Task Management</a>
-        <a class="btn btn-primary btn-large" href="{%url 'task:projectmanagement'%}" role="button">Project Task Management</a>
+        <a class="btn btn-primary btn-large" th:href="@{/task-list}" role="button">Personal Task Management</a>
+        <a class="btn btn-primary btn-large" th:href="@{/projectmanagement}" role="button">Project Task Management</a>
     </div>
 </div>
 
-
-
-<!--end::Content-->
-{% endblock %}
+</body>
+</html>

@@ -1,70 +1,69 @@
-{% extends 'base.html' %}
-{% load static %}
+<!--login.html-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" dir="ltr" th:inline="javascript">
+<head>
+    <meta charset="utf-8"/>
+    <title>TaskIT Login</title>
 
-{% block css %}
-<link href="{% static '/css/pages/loginpage.css' %}" rel="stylesheet" type="text/css"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-{% endblock %}
+    <!-- 引入外部 CSS 檔案 -->
+    <link th:href="@{/css/style.bundle.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/pages/login.css}" rel="stylesheet" type="text/css"/>
+    <!-- 如果需要通知的樣式，可以保留下面這行 -->
+    <!-- <link th:href="@{/css/pages/notification.css}" rel="stylesheet" type="text/css"/> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+</head>
+<body id="kt_body" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
 
-{% block title %}TaskIT Login{% endblock %}
-
-<style>
-.separator-or {
-    font-size: 16px;
-    padding: 8px 20px;
-    border-radius: 30px; /* Makes it rounded */
-    display: inline-block;
-    background-color: #f3f6f9; /* Light grey background, you can change this */
-    color: #7E8299; /* Dark grey text, this too can be changed */
-    font-weight: bold;
-    margin: 2em 0; /* Adds space above and below the separator */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
-    border: 1px solid #e5eaee; /* Optional: adds a slight border */
-}
-
-</style>
-{% block content %}
-<!--begin::Main-->
+<!-- 主內容 -->
 <div class="d-flex flex-column flex-root">
-    <!--begin::Login-->
-    <div class="login login-2 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
-        <!--begin::Aside-->
-        <div class="login-aside d-flex flex-row-auto position-relative overflow-hidden order-lg-1" style="background-image: url('/static/media/svgs/loginimage.svg');">
-            <!--begin: Aside Container-->
+    <!-- 登錄部分 -->
+    <div class="login login-2 d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
+        <!-- 側邊部分 -->
+        <div class="login-aside d-flex flex-row-auto position-relative overflow-hidden order-lg-1"
+             th:style="'background-image: url(' + @{/media/svgs/loginimage.svg} + ');'">
+            <!-- 側邊容器 -->
             <div class="d-flex flex-row-fluid flex-column justify-content-between py-9 px-7 py-lg-13 px-lg-35">
-                <!--begin::Aside Top-->
-                
-                <!--end::Aside Top-->
+                <!-- 可以在這裡新增側邊內容 -->
             </div>
-            <!--end: Aside Container-->
+            <!-- 側邊容器結束 -->
         </div>
-        <!--end::Aside-->
-        <!--begin::Content-->
+        <!-- 側邊部分結束 -->
+
+        <!-- 內容部分 -->
         <div class="content d-flex flex-column w-100 order-lg-2">
-            <!--begin::Title-->
+            <!-- 標題 -->
             <div class="d-flex flex-column justify-content-center align-items-center text-center pt-md-5 pt-sm-5 px-lg-0 pt-5 px-7">
                 <h3 class="display4 font-weight-bolder my-7 text-dark" style="color: #986923;">TaskIT</h3>
-                <!--begin::Image-->
-                <!-- Image placeholder if necessary -->
-                <!--end::Image-->
+                <!-- 如果需要，可以在這裡新增圖片 -->
             </div>
-            <!--end::Title-->
-            <!--begin::Login forms-->
+            <!-- 標題結束 -->
+
+            <!-- 表單容器 -->
             <div class="d-flex flex-column-fluid flex-center mt-30 mt-lg-0">
-                <!--begin::Signin-->
-                <div class="login-form login-signin">
-                    <!--begin::Form-->
-                    <form class="form" novalidate="novalidate" id="kt_login_signin_form" method="post">
-                        {% csrf_token %}
-                        <!--begin::Title-->
+                <!-- 登錄表單 -->
+                <div class="login-form" th:if="${showSignupForm} != true">
+                    <!-- 顯示註冊成功資訊 -->
+                    <div th:if="${param.signupSuccess}" class="alert alert-success text-center">
+                        Registration successful! Please log in.
+                    </div>
+
+                    <!-- 顯示登錄錯誤資訊 -->
+                    <div th:if="${loginError}" class="alert alert-danger text-center">
+                        <p th:text="${loginError}"></p>
+                    </div>
+
+                    <!-- 登錄表單 -->
+                    <form class="form" novalidate="novalidate" id="kt_login_signin_form" method="post" th:action="@{/login}">
+                        <!-- CSRF 令牌 -->
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <!-- 標題 -->
                         <div class="text-center pb-8">
                             <h2 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Welcome Back!</h2>
                         </div>
-                        <!--end::Title-->
-                        <!--begin::Form group-->
-                        <!-- <div class="form-group">
-                            <input class="form-control form-control-solid h-auto py-5 px-6" type="email" placeholder="Email" name="email" autocomplete="off"/>
-                        </div> -->
+                        <!-- 標題結束 -->
+
+                        <!-- 使用者名稱輸入 -->
                         <div class="form-group">
                             <label class="font-size-h6 font-weight-bolder text-dark">Username</label>
                             <input id="in-email"
@@ -73,78 +72,102 @@
                                    name="username" autocomplete="off"/>
                         </div>
 
+                        <!-- 密碼輸入 -->
                         <div class="form-group position-relative">
                             <label class="font-size-h6 font-weight-bolder text-dark pt-5">Password</label>
                             <div style="display: flex; align-items: center;">
                                 <input id="in-password"
                                        class="form-control form-control-solid h-auto py-7 px-6 rounded-lg"
                                        type="password" name="password" autocomplete="off" style="flex-grow: 1;"/>
-                                <i id="toggle-password" class="fa fa-eye" onclick="togglePasswordVisibility()" style="cursor: pointer; margin-left: -30px;"></i>
+                                <i id="toggle-password" class="fa fa-eye" style="cursor: pointer; margin-left: -30px;"></i>
                             </div>
-                            
                         </div>
-                        
-                        <!--end::Form group-->
-                        <!--begin::Action-->
+
+                        <!-- 登錄按鈕 -->
                         <div class="text-center pt-2">
-                            <button id="kt_login_signin_submit" class="btn btn-dark font-weight-bolder font-size-h6 px-8 py-4 my-3">Login</button>
+                            <button id="kt_login_signin_submit"
+                                    class="btn btn-dark font-weight-bolder font-size-h6 px-8 py-4 my-3">Login
+                            </button>
                         </div>
-                        <!--end::Action-->
-                        <!--begin::Separator-->
+
+                        <!-- 分隔符 -->
                         <div class="text-center my-7">
                             <span class="separator-or">OR</span>
                         </div>
-                        <!--end::Separator-->
-                        <!--begin::Action-->
+
+                        <!-- 註冊按鈕 -->
                         <div class="text-center">
-                            <button id="kt_login_signup" class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3">Create an Account</button>
+                            <button type="button" id="kt_login_signup"
+                                    class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3">Create an Account
+                            </button>
                         </div>
-                        <!--end::Action-->
                     </form>
-                    <!--end::Form-->
+                    <!-- 登錄表單結束 -->
                 </div>
-                <!--end::Signin-->
-                <!--begin::Signup-->
-                <div class="login-form login-signup pt-11">
-                    <!--begin::Form-->
-                    <form class="form" novalidate="novalidate" id="kt_login_signup_form"
-                          method="post">{% csrf_token %}
-                        <!--begin::Title-->
+                <!-- 登錄表單結束 -->
+
+                <!-- 登錄檔單 -->
+                <div class="login-form pt-11" th:if="${showSignupForm}">
+                    <!-- 顯示驗證錯誤資訊 -->
+                    <div th:if="${signupError}" class="alert alert-danger">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
+                            <li th:each="err : ${#fields.errors('email')}" th:text="${err}"></li>
+                            <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+
+                    <!-- 登錄檔單 -->
+                    <form class="form" novalidate="novalidate" id="kt_login_signup_form" method="post"
+                          th:action="@{/signUp}" th:object="${user}">
+                        <!-- CSRF 令牌 -->
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <!-- 標題 -->
                         <div class="text-center pb-8">
                             <h2 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Sign Up</h2>
-                            <p class="text-muted font-weight-bold font-size-h4">Enter your details to create
-                                your
-                                account</p>
+                            <p class="text-muted font-weight-bold font-size-h4">Enter your details to create your account</p>
                         </div>
-                        <!--end::Title-->
-                        <!--begin::Form group-->
+
+                        <!-- 使用者名稱輸入 -->
                         <div class="form-group">
                             <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
-                                   type="text" placeholder="Username" name="username" autocomplete="off"/>
+                                   type="text" placeholder="Username" name="username" autocomplete="off" th:value="*{username}"/>
+                            <!-- 顯示使用者名稱欄位的錯誤資訊 -->
+                            <div th:if="${#fields.hasErrors('username')}" class="text-danger">
+                                <small th:text="${#fields.errors('username')}"></small>
+                            </div>
                         </div>
-                        <!--end::Form group-->
-                        <!--begin::Form group-->
+
+                        <!-- 信箱輸入 -->
                         <div class="form-group">
                             <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
-                                   type="email" placeholder="Email" name="email" autocomplete="off"/>
+                                   type="email" placeholder="Email" name="email" autocomplete="off" th:value="*{email}"/>
+                            <!-- 顯示信箱欄位的錯誤資訊 -->
+                            <div th:if="${#fields.hasErrors('email')}" class="text-danger">
+                                <small th:text="${#fields.errors('email')}"></small>
+                            </div>
                         </div>
-                        <!--end::Form group-->
-                        <!--begin::Form group-->
+
+                        <!-- 密碼輸入 -->
                         <div class="form-group">
                             <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                                    type="password" placeholder="Password" name="password" autocomplete="off"/>
+                            <!-- 顯示密碼欄位的錯誤資訊 -->
+                            <div th:if="${#fields.hasErrors('password')}" class="text-danger">
+                                <small th:text="${#fields.errors('password')}"></small>
+                            </div>
                         </div>
-                        <!--end::Form group-->
-                        <!--begin::Form group-->
+
+                        <!-- 確認密碼輸入 -->
                         <div class="form-group">
                             <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
-                                   type="password" placeholder="Confirm password" name="cpassword"
-                                   autocomplete="off"/>
+                                   type="password" placeholder="Confirm password" name="cpassword" autocomplete="off"/>
                         </div>
-                        <!--end::Form group-->
-                        <!--begin::Form group-->
+
+                        <!-- 提交和取消按鈕 -->
                         <div class="form-group d-flex flex-wrap flex-center pb-lg-0 pb-3">
-                            <button type="button" id="kt_login_signup_submit"
+                            <button type="submit" id="kt_login_signup_submit"
                                     class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">
                                 Submit
                             </button>
@@ -153,22 +176,21 @@
                                 Cancel
                             </button>
                         </div>
-                        <!--end::Form group-->
                     </form>
-                    <!--end::Form-->
+                    <!-- 登錄檔單結束 -->
                 </div>
-                <!--end::Signup-->                
+                <!-- 登錄檔單結束 -->
             </div>
-            <!--end::Login forms-->
+            <!-- 表單容器結束 -->
         </div>
-        <!--end::Content-->
+        <!-- 內容部分結束 -->
     </div>
-    <!--end::Login-->
+    <!-- 登錄部分結束 -->
 </div>
-<!--end::Main-->
-{% endblock %}
+<!-- 主內容結束 -->
 
-{% block js %}
-<script src="{% static '/js/pages/loginpage.js' %}"></script>
-{% endblock %}
-```
+<!-- 引入外部 JS 檔案 -->
+<script th:src="@{/js/pages/login.js}" th:inline="javascript"></script>
+
+</body>
+</html>

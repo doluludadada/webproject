@@ -1,66 +1,80 @@
-{% extends 'base.html' %}
-{% load static %}
+<!-- base-task.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="~{::title}">TaskIT</title>
 
-{% block css %}
-{{ block.super }}
-<link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
-<link href="{% static 'css/pages/homepage.css' %}" rel="stylesheet" type="text/css"/>
-<link href="{% static 'css/pages/base-task.css' %}" rel="stylesheet" type="text/css"/>
-<link href="{% static 'css/pages/notification.css' %}" rel="stylesheet" type="text/css"/>
-{% endblock %}
+    <!-- 引入公共的 CSS -->
+    <link th:href="@{https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css}" rel="stylesheet">
+    <link th:href="@{/css/pages/base-task.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/pages/notification.css}" rel="stylesheet" type="text/css"/>
 
-{% block js %}
-<script src="{% static 'js/pages/notification.js' %}"></script>
-{% endblock %}
+    <!-- 子模板自定義的 CSS -->
+    <th:block th:replace="~{::css}"></th:block>
+</head>
+<body>
 
-{% block content %}
+<!-- Logo -->
 <div class="logo">
-    <a href="{% url 'homepage' %}" title="Home">
-        <img src="{% static 'media/images/Logo.png' %}" alt="Logo" style="height: 50px;">
+    <a th:href="@{/homepage}" title="Home">
+        <img th:src="@{/media/images/Logo.png}" alt="Logo" style="height: 50px;">
     </a>
 </div>
 
+<!-- 菜單切換按鈕 -->
 <div class="nav-toggle" id="toggleNav">
-    <span class="nav-toggle-icon">&#9776;</span> <!-- Hamburger icon -->
+    <span class="nav-toggle-icon">&#9776;</span> <!-- 漢堡圖標 -->
 </div>
 
+<!-- 導航菜單 -->
 <div class="nav-menu" id="navMenu">
     <div class="nav-header">
-        <!-- User Profile -->
+        <!-- 使用者頭像 -->
         <div class="user-profile">
-            <img class="rounded-circle img-fluid userImage_class" src="/static/media/userpic/{{user.id}}.jpg" alt="user picture">
+            <img class="rounded-circle img-fluid userImage_class"
+                 th:src="@{/media/userpic/{userId}.jpg(userId=${user.id})}"
+                 alt="user picture">
         </div>
-			
-        <!-- Logout Button -->
+
+        <!-- 登出按鈕 -->
         <div class="logout-area">
-            <a href="{% url 'signOut' %}" class="logout-button">
+            <a th:href="@{/logout}" class="logout-button">
                 <span class="logout-icon">Logout</span>
             </a>
         </div>
     </div>
 
-    <!-- Menu Items -->
+    <!-- 菜單項目 -->
     <nav class="container-fluid">
         <ul>
-            <li><a href="{% url 'task:user_profile' %}">Profile</a></li>
-            <li><a href="{% url 'change_password' %}">Change Password</a></li>
-            <li><a href="{% url 'task:calendar' %}">Calendar</a></li>
-            <li><a href="{% url 'aboutus' %}">About Us</a></li>
-           
-
+            <li><a th:href="@{/user_profile}">Profile</a></li>
+            <li><a th:href="@{/change_password}">Change Password</a></li>
+            <li><a th:href="@{/calendar}">Calendar</a></li>
+            <li><a th:href="@{/aboutus}">About Us</a></li>
         </ul>
     </nav>
 </div>
 
+<!-- 通知鈴鐺 -->
 <div id="notification-bell" style="z-index: 1000;" onclick="toggleNotifications()">
-    <img src="{% static 'media/images/bell_icon.png' %}" alt="Notification Bell">
-    <span id="notification-count" style="background-color: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; position: absolute; top: 0px; right: 0px; font-size: 12px; text-align: center;">0</span>
+    <img th:src="@{/media/images/bell_icon.png}" alt="Notification Bell">
+    <span id="notification-count"
+          style="background-color: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; position: absolute; top: 0px; right: 0px; font-size: 12px; text-align: center;">0</span>
 </div>
 
 <div id="notification-popup" style="display: none;"></div>
 
-{% block content-task %}
-    <!-- Child templates content here -->
-{% endblock %}
+<!-- 主內容區塊 -->
+<main>
+    <th:block th:replace="~{::content}"></th:block>
+</main>
 
-{% endblock %}
+<!-- 引入公共的 JS -->
+<script th:src="@{/js/pages/notification.js}"></script>
+
+<!-- 子模板自定義的 JS -->
+<th:block th:replace="~{::js}"></th:block>
+
+</body>
+</html>

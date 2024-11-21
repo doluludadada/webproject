@@ -1,3 +1,4 @@
+// homepage.js
 document.addEventListener('DOMContentLoaded', function() {
     var toggleNav = document.getElementById('toggleNav');
     if (toggleNav) {
