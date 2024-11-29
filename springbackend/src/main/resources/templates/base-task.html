@@ -1,80 +1,77 @@
 <!-- base-task.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
+<head th:fragment="head-content">
     <meta charset="UTF-8">
-    <title th:replace="~{::title}">TaskIT</title>
-
+    <title th:block="text">TaskIT</title>
     <!-- 引入公共的 CSS -->
     <link th:href="@{https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css}" rel="stylesheet">
+    <link th:href="@{/css/pages/homepage.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/css/pages/base-task.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/css/pages/notification.css}" rel="stylesheet" type="text/css"/>
-
-    <!-- 子模板自定義的 CSS -->
+    <!-- 預留位置：子範本自訂的 CSS -->
     <th:block th:replace="~{::css}"></th:block>
 </head>
 <body>
-
-<!-- Logo -->
-<div class="logo">
-    <a th:href="@{/homepage}" title="Home">
-        <img th:src="@{/media/images/Logo.png}" alt="Logo" style="height: 50px;">
-    </a>
-</div>
-
-<!-- 菜單切換按鈕 -->
-<div class="nav-toggle" id="toggleNav">
-    <span class="nav-toggle-icon">&#9776;</span> <!-- 漢堡圖標 -->
-</div>
-
-<!-- 導航菜單 -->
-<div class="nav-menu" id="navMenu">
-    <div class="nav-header">
-        <!-- 使用者頭像 -->
-        <div class="user-profile">
-            <img class="rounded-circle img-fluid userImage_class"
-                 th:src="@{/media/userpic/{userId}.jpg(userId=${user.id})}"
-                 alt="user picture">
-        </div>
-
-        <!-- 登出按鈕 -->
-        <div class="logout-area">
-            <a th:href="@{/logout}" class="logout-button">
-                <span class="logout-icon">Logout</span>
+    <div th:fragment="layout">
+        <!-- Logo -->
+        <div class="logo">
+            <a th:href="@{/homepage}" title="Home">
+                <img th:src="@{/media/images/Logo.png}" alt="Logo" style="height: 50px;">
             </a>
         </div>
+
+        <!-- 菜單切換按鈕 -->
+        <div class="nav-toggle" id="toggleNav">
+            <span class="nav-toggle-icon">&#9776;</span> <!-- 漢堡圖示 -->
+        </div>
+
+        <!-- 導航菜單 -->
+        <div class="nav-menu" id="navMenu">
+            <div class="nav-header">
+                <!-- 使用者頭像 -->
+                <div class="user-profile">
+                    <img class="rounded-circle img-fluid userImage_class"
+                         th:src="@{/media/userpic/{userId}.jpg(userId=${user.id})}"
+                         alt="user picture">
+                </div>
+
+                <!-- 登出按鈕 -->
+                <div class="logout-area">
+                    <a th:href="@{/logout}" class="logout-button">
+                        <span class="logout-icon">Logout</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 菜單項目 -->
+            <nav class="container-fluid">
+                <ul>
+                    <li><a th:href="@{/user_profile}">Profile</a></li>
+                    <li><a th:href="@{/change_password}">Change Password</a></li>
+                    <li><a th:href="@{/calendar}">Calendar</a></li>
+                    <li><a th:href="@{/aboutus}">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 通知鈴鐺 -->
+        <div id="notification-bell" style="z-index: 1000;" onclick="toggleNotifications()">
+            <img th:src="@{/media/images/bell_icon.png}" alt="Notification Bell">
+            <span id="notification-count"
+                  style="background-color: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; position: absolute; top: 0px; right: 0px; font-size: 12px; text-align: center;">0</span>
+        </div>
+
+        <div id="notification-popup" style="display: none;"></div>
+
+        <!-- 內容預留位置 -->
+        <div th:replace="~{::content}"></div>
+
+        <!-- 引入公共的 JS -->
+        <script th:src="@{/js/pages/notification.js}"></script>
+
+        <!-- 預留位置：子範本自訂的 JS -->
+        <th:block th:replace="~{::js}"></th:block>
     </div>
-
-    <!-- 菜單項目 -->
-    <nav class="container-fluid">
-        <ul>
-            <li><a th:href="@{/user_profile}">Profile</a></li>
-            <li><a th:href="@{/change_password}">Change Password</a></li>
-            <li><a th:href="@{/calendar}">Calendar</a></li>
-            <li><a th:href="@{/aboutus}">About Us</a></li>
-        </ul>
-    </nav>
-</div>
-
-<!-- 通知鈴鐺 -->
-<div id="notification-bell" style="z-index: 1000;" onclick="toggleNotifications()">
-    <img th:src="@{/media/images/bell_icon.png}" alt="Notification Bell">
-    <span id="notification-count"
-          style="background-color: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; position: absolute; top: 0px; right: 0px; font-size: 12px; text-align: center;">0</span>
-</div>
-
-<div id="notification-popup" style="display: none;"></div>
-
-<!-- 主內容區塊 -->
-<main>
-    <th:block th:replace="~{::content}"></th:block>
-</main>
-
-<!-- 引入公共的 JS -->
-<script th:src="@{/js/pages/notification.js}"></script>
-
-<!-- 子模板自定義的 JS -->
-<th:block th:replace="~{::js}"></th:block>
-
 </body>
 </html>

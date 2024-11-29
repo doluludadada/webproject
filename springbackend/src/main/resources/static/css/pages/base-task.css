@@ -1,11 +1,12 @@
-/*base-task.css */
+/* base-task.css */
+
 /* Navigation toggle and menu styles */
 .nav-toggle {
   position: fixed;
   top: 10px;
   right: 10px;
   cursor: pointer;
-  z-index: 1001; 
+  z-index: 1001;
   background: none;
   border: none;
   font-size: 40px; /* Larger icon size */
@@ -26,13 +27,13 @@
 
 /* Navigation menu styling */
 .nav-menu {
-  display: block; 
+  display: block;
   position: fixed;
   top: 0;
   right: 0;
   width: 250px;
   height: 100%;
-  background: lightblue; /* Dark background for the menu */
+  background: lightblue; /* Background color for the menu */
   box-shadow: -2px 0 5px rgba(0,0,0,0.5);
   z-index: 1000;
   transition: transform 0.3s ease;
@@ -91,9 +92,9 @@
 }
 
 .logout-area {
-  position: fixed; 
-  top: 20px; 
-  right: 20px; 
+  position: fixed;
+  top: 20px;
+  right: 20px;
   z-index: 1500; /* High z-index to ensure it is above other elements */
 }
 
@@ -105,13 +106,13 @@
   text-align: center;
   display: block; /* Use block to fill the area of .logout-area */
   text-decoration: none; /* Remove underline from anchor tag */
-  color: #0e0e0e; /* White color for text */
+  color: #0e0e0e; /* Dark color for text */
   transition: color 0.3s ease; /* Smooth transition for hover effects */
 }
 
 .logout-button:hover {
   text-decoration: none; /* Ensure no underline on hover */
-  color: #0e0e0e; /* Light grey on hover for visual feedback */
+  color: #0e0e0e; /* Dark color on hover for visual feedback */
 }
 
 .logout-icon {
@@ -125,11 +126,86 @@
   content: '×'; /* 'X' icon for close button */
 }
 
+/* Logo styling */
 .logo {
-  position: fixed; /* or absolute, depending on your layout */
+  position: fixed; /* Fixed position */
   z-index: 2000; /* Higher than other elements */
-  /* other styling */
   top: 0;
   left: 0;
   padding: 20px;
+}
+
+/* Centered container for homepage content */
+.centered-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Greeting container */
+.greeting-container {
+    display: flex; /* Use flexbox to layout the children */
+    justify-content: center; /* Center the children horizontally */
+    align-items: center; /* Center the children vertically */
+    gap: 20px; /* Add space between the children */
+}
+
+.hello-animation {
+    display: inline-block;
+    animation: flyInFromLeft 2s ease forwards;
+    margin-right: 20px;
+}
+
+.username-animation {
+    display: inline-block;
+    animation: flyInFromRight 2s ease forwards;
+}
+
+/* Button specific styles for larger buttons */
+.btn-primary {
+    background-color: #4CAF50; /* Light green color */
+    border-color: #4CAF50; /* Same color as the button */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+    color: white; /* Ensuring text is white */
+    padding: 15px 30px; /* Larger padding for buttons */
+    text-decoration: none; /* Remove underline from link */
+    display: inline-block; /* Align buttons properly */
+    margin: 20px; /* Space out buttons */
+    font-size: 1.5rem; /* Larger font size for button text */
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #367c39 !important; /* Darker green on hover/focus */
+    border-color: #367c39 !important; /* Border color matches background on hover/focus */
+}
+
+.btn-large {
+    font-size: 2rem; /* Larger font size for button text */
+    padding: 20px 40px; /* Larger padding for buttons */
+}
+
+/* Animations */
+@keyframes flyInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes flyInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

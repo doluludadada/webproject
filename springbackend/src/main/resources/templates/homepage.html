@@ -1,33 +1,36 @@
-<!-- 使用 Thymeleaf 的模板繼承語法 -->
+<!-- homepage.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="'TaskIT Homepage'">TaskIT Homepage</title>
+<head th:replace="base-task :: head-content">
+    <title>TaskIT Homepage</title>
 
-    <!-- 引入 CSS -->
-    <link th:href="@{/css/pages/homepage.css}" rel="stylesheet" type="text/css"/>
-    <link th:href="@{/css/pages/base-task.css}" rel="stylesheet" type="text/css"/>
-
-    <!-- 引入 JS -->
-    <script th:src="@{/js/pages/homepage.js}"></script>
+    <!-- 如果有額外的 CSS，可以在這裡新增 -->
+    <th:block th:fragment="css">
+        <!-- 例如，額外的 CSS 檔案 -->
+        <link th:href="@{/css/pages/extra-styles.css}" rel="stylesheet" type="text/css"/>
+    </th:block>
 </head>
 <body>
+    <!-- 繼承 base-task.html 的 layout 片段 -->
+    <div th:replace="base-task :: layout">
+        <!-- 主內容區，將被插入到 layout 片段中的 ::content 位置 -->
+        <th:block th:fragment="content">
+            <div class="centered-container">
+                <div class="greeting-container">
+                    <h1 class="hello-animation">Hello</h1>
+                    <h1 class="username-animation" th:text="${username}"></h1>
+                </div>
+                <div class="button-container">
+                    <a class="btn btn-primary btn-large" th:href="@{/task-list}" role="button">Personal Task Management</a>
+                    <a class="btn btn-primary btn-large" th:href="@{/projectmanagement}" role="button">Project Task Management</a>
+                </div>
+            </div>
+        </th:block>
 
-<!-- 引入導航欄或其他公共部分 -->
-<!-- 可以使用 Thymeleaf 的片段（fragments）進行模板繼承 -->
-
-<!-- 主內容 -->
-<div class="centered-container">
-    <div class="greeting-container">
-        <h1 class="hello-animation">Hello</h1>
-        <h1 class="username-animation" th:text="${username}"></h1>
+        <!-- 引入頁面特定的 JS -->
+        <th:block th:fragment="js">
+            <script th:src="@{/js/pages/homepage.js}"></script>
+        </th:block>
     </div>
-    <div class="button-container">
-        <a class="btn btn-primary btn-large" th:href="@{/task-list}" role="button">Personal Task Management</a>
-        <a class="btn btn-primary btn-large" th:href="@{/projectmanagement}" role="button">Project Task Management</a>
-    </div>
-</div>
-
 </body>
 </html>
