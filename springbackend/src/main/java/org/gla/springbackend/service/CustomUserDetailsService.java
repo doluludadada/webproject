@@ -15,6 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Constructor injection for UserRepository.
+     *
      * @param userRepository The repository to access User data.
      */
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -23,6 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Loads the user by username.
+     *
      * @param username The username entered by the user.
      * @return UserDetails object containing user information.
      * @throws UsernameNotFoundException if the user is not found.
